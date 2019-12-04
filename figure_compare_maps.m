@@ -38,7 +38,9 @@ function figure_compare_maps(src)
 	set(h,'Position',[scrnsz(3)/2-figdims(1)/2 scrnsz(4)/2-figdims(2)/2 figdims(1) figdims(2)])
 	imagesc(hqbold_dbv_map,[0 0.1]);
 	colorbar
-	colormap('jet')
+	cmap=colormap('jet');
+	cmap(1,:)=[0 0 0];
+	colormap(cmap);
 	set(gca,'xticklabel',[])
 	set(gca,'yticklabel',[])
 	axis image
@@ -58,7 +60,8 @@ function figure_compare_maps(src)
 	set(h,'Position',[scrnsz(3)/2-figdims(1)/2 scrnsz(4)/2-figdims(2)/2 figdims(1) figdims(2)])
 	imagesc(sqbold_dbv_map,[0 0.1]);
 	colorbar
-	colormap('jet')
+	%colormap('jet')
+	colormap(cmap);
 	set(gca,'xticklabel',[])
 	set(gca,'yticklabel',[])
 	axis image
