@@ -27,14 +27,16 @@ srcout=${src}/derivatives/${subj}
 # 		--tis 2.05,2.30,2.55,2.80,3.05,3.30 --bolus 1.80 --casl --slicedt 0.00000 \
 # 		-c "${srcout}/${subj}_asl_calib.nii.gz" --tr 10.00 --cgain 1.00 --cmethod voxel \
 # 		--t1 1.30 --bat 1.30 --t1b 1.65 --alpha 0.85 --fixbolus --spatial --mc -o "${srcout}"
-oxford_asl  -i "${srcout}/${subj}_asl_tagctl_reg.nii.gz" --ibf=rpt --iaf=tc \
+oxford_asl  -i "${srcout}/${subj}_asl_tagctl_mcf.nii.gz" --ibf=rpt --iaf=tc \
 		--tis 2.05,2.30,2.55,2.80,3.05,3.30 --bolus 1.80 --casl --slicedt 0.00000 \
-		-c "${srcout}/${subj}_asl_calib_reg.nii.gz" --tr 10.00 --cgain 1.00 --cmethod voxel \
-		--t1 1.30 --bat 1.30 --t1b 1.65 --alpha 0.85 --fixbolus --spatial --mc -o "${srcout}"
+		-c "${srcout}/${subj}_asl_calib.nii.gz" --tr 10.00 --cgain 1.00 --cmethod voxel \
+		--t1 1.30 --bat 1.30 --t1b 1.65 --alpha 0.85 --fixbolus --spatial -o "${srcout}"
+
+fslmaths ${srcout}/native_space/perfusion_calib ${srcout}/${subj}_perfusion_calib
 			
 # transform into long tau space 
 #applywarp --in=${srcout}/native_space/perfusion_calib --ref=${srcout}/${subj}_gase_long_tau_ref_bet \
 #		--out=${srcout}/${subj}_perfusion_reg --premat=${srcout}/asl2ltau.mat --interp=trilinear
-		
+
 
 

@@ -1,9 +1,11 @@
-function run_hcqBOLD_analysis(src,subj_id)
+function run_hqBOLD_analysis_mod(src,subj_id)
 
 % PROCESS GASE DATA
 
 %% Load dataset
-[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_long_tau_mcf_sm']);
+%[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_long_tau_mcf_sm']);
+[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_merge_mcf_reg_sm']);
+r2p_data = r2p_data(:,:,:,29:46);
 [x y z v] = size(r2p_data);
 tau_ms=(15:3:66);
 
@@ -63,7 +65,7 @@ et_o2 = et_o2_co2(:,3);
 
 % repetition time
 tr = 1; % [sec] 
-t = (1:600)' .* tr; 
+t = (1:300)' .* tr; 
 
 % interpolate end-tidal values 
 et_o2 = interp1((et_t-et_t(1)).*60, et_o2, t);
@@ -72,10 +74,13 @@ et_co2 = interp1((et_t-et_t(1)).*60, et_co2, t);
 et_o2_sm = conv((et_o2-mean(et_o2(1:100)))./max(et_o2-mean(et_o2(1:100))),gampdf(0:0.1:60,1,3));
 % X
 %X = [ones(size(t)) (et_o2-mean(et_o2(1:100)))./max(et_o2-mean(et_o2(1:100)))];
-X = [ones(size(t)) et_o2_sm(1:600)'./max(et_o2_sm(1:600))];
+X = [ones(size(t)) et_o2_sm(1:300)'./max(et_o2_sm(1:300))];
+stim=(t>=160).*(t<=260)+(t>130).*(t<160).*(t-130)./30-(t>260).*(t<290).*(t-260)/30+(t>260).*(t<290);
+X2 = [ones(size(t)) stim];
 
 % Y
 Y1 = reshape(bold_data,x*y*z,v)';
+Y1 = Y1(1:300,:);
 Y2 = et_o2;
 
 p = lscov(X,Y1);
@@ -87,10 +92,12 @@ p = lscov(X,Y1);
 
 dbold=reshape(p(2,:)./p(1,:),x,y,z);
 
-p = lscov(X,Y2);
+p = lscov(X2,Y2);
 
 pao2=p(1);
 dpao2=p(2);
+pao2=mean(Y2(1:100));
+dpao2=mean(Y2(175:225))-pao2;
 
 A = 27;
 B = 0.2;
@@ -117,9 +124,9 @@ oef = r2p./(v.*gamma.*(4./3).*pi.*dChi0.*Hct.*B0).*mask;
 
 %s=regexp(r2p_fname,'_');
 
-save_avw(r2p, [src '/derivatives/' subj_id '/' subj_id '_hcqbold_r2p'], 'f', scales)
-save_avw(v, [src '/derivatives/' subj_id '/' subj_id '_hcqbold_dbv'], 'f', scales)
-save_avw(oef, [src '/derivatives/' subj_id '/' subj_id '_hcqbold_oef'], 'f', scales)
+save_avw(r2p, [src '/derivatives/' subj_id '/' subj_id '_hcqbold_r2p_mod'], 'f', scales)
+save_avw(v, [src '/derivatives/' subj_id '/' subj_id '_hcqbold_dbv_mod'], 'f', scales)
+save_avw(oef, [src '/derivatives/' subj_id '/' subj_id '_hcqbold_oef_mod'], 'f', scales)
 %save_avw(dhb, [src '/derivatives/' subj_id '/' subj_id '_hcqbold_dhb'], 'f', scales)
 
 %keyboard;
