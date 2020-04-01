@@ -16,7 +16,7 @@ tau_ms2=(15:3:66);
 tau_ms3=zeros(1,11);
 
 %r2p_data=cat(4,r2p_data1,r2p_data2,r2p_data3);
-[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_merge_mcf_reg_sm']);
+[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_merge_mcf_sm']);
 [x y z v] = size(r2p_data);
 tau_ms=[tau_ms1 tau_ms2 tau_ms3];
 

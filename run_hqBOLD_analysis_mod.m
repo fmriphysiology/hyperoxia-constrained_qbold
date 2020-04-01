@@ -4,7 +4,7 @@ function run_hqBOLD_analysis_mod(src,subj_id)
 
 %% Load dataset
 %[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_long_tau_mcf_sm']);
-[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_merge_mcf_reg_sm']);
+[r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_merge_mcf_sm']);
 r2p_data = r2p_data(:,:,:,29:46);
 [x y z v] = size(r2p_data);
 tau_ms=(15:3:66);

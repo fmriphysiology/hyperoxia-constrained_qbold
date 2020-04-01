@@ -1,6 +1,6 @@
 function figure_bland_altman(T1)
 
-	hqbold_oef=T1.hqbold_mod_oef_median_gm(1:10).*1.19;
+	hqbold_oef=T1.hqbold_mod_oef_median_gm(1:10);
 	sqbold_oef=T1.sqbold_mod_oef_median_gm(1:10);
 	trust_oef=T1.trust_oef(1:10);
 	

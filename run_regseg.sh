@@ -99,7 +99,11 @@ echo "Applying transforms to GASE, BOLD and ASL data"
 #Transform BOLD data to long tau space
 convert_xfm -omat ${srcout}/se2ltau.mat -inverse ${srcout}/ltau2se.mat
 convert_xfm -omat ${srcout}/bold2ltau.mat -concat ${srcout}/se2ltau.mat ${srcout}/bold2se.mat
-applywarp --in=${srcout}/${subj}_bold_mcf --ref=${srcout}/${subj}_gase_long_tau_ref_bet --out=${srcout}/${subj}_bold_mcf_reg --premat=${srcout}/bold2ltau.mat --interp=trilinear
+
+convert_xfm -omat ${srcout}/se2asemerge.mat -inverse ${srcout}/asemerge2se.mat
+convert_xfm -omat ${srcout}/bold2asemerge.mat -concat ${srcout}/se2asemerge.mat ${srcout}/bold2se.mat
+
+applywarp --in=${srcout}/${subj}_bold_mcf --ref=${srcout}/${subj}_gase_long_tau_ref_bet --out=${srcout}/${subj}_bold_mcf_reg --premat=${srcout}/bold2asemerge.mat --interp=trilinear
 
 #Transform ASL data to long tau space
 convert_xfm -omat ${srcout}/se2asl.mat -inverse ${srcout}/asl2se.mat
@@ -124,6 +128,7 @@ fslmaths ${srcout}/${subj}_gase_long_tau_mcf -s $sigma ${srcout}/${subj}_gase_lo
 fslmaths ${srcout}/${subj}_bold_mcf_reg -s $sigma ${srcout}/${subj}_bold_mcf_reg_sm
 fslmaths ${srcout}/${subj}_gase_mcf_reg -s $sigma ${srcout}/${subj}_gase_mcf_reg_sm
 fslmaths ${srcout}/${subj}_gase_merge_mcf_reg -s $sigma ${srcout}/${subj}_gase_merge_mcf_reg_sm
+fslmaths ${srcout}/${subj}_gase_merge_mcf -s $sigma ${srcout}/${subj}_gase_merge_mcf_sm
 
 echo "Segment SE and transform to GASE space"
 
