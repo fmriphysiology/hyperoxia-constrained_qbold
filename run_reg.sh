@@ -44,10 +44,12 @@ echo "Creating reference images for registration"
 # Concatenate GASE datasets together - motion correct, time average and brain extract
 fslmerge -t ${srcout}/${subj}_gase_merge ${srcout}/${subj}_gase ${srcout}/${subj}_gase_long_tau ${srcout}/${subj}_gase_spin_echo_repeats
 mcflirt -in ${srcout}/${subj}_gase_merge -out ${srcout}/${subj}_gase_merge_mcf
-fslmaths ${srcout}/${subj}_gase_merge_mcf -Tmean ${srcout}/${subj}_gase_merge_ref
-bet ${srcout}/${subj}_gase_merge_ref ${srcout}/${subj}_gase_merge_ref_bet -Z
+fslroi ${srcout}/${subj}_gase_merge_mcf ${srcout}/${subj}_gase_merge_se 46 11
+fslmaths ${srcout}/${subj}_gase_merge_se -Tmean ${srcout}/${subj}_gase_merge_ref
+bet ${srcout}/${subj}_gase_merge_ref ${srcout}/${subj}_gase_merge_ref_bet -Z -f 0.3
+
 # Invert contrast in GASE data
-fslmaths ${srcout}/${subj}_gase_merge_ref_bet -recip ${srcout}/${subj}_gase_merge_ref_bet_inv
+#fslmaths ${srcout}/${subj}_gase_merge_ref_bet -recip ${srcout}/${subj}_gase_merge_ref_bet_inv
 
 # Wholebrain - brain extract
 bet ${srcout}/${subj}_gase_wholebrain ${srcout}/${subj}_gase_wholebrain_ref_bet
@@ -61,13 +63,20 @@ bet ${srcout}/${subj}_bold_ref ${srcout}/${subj}_bold_ref_bet -Z
 bet ${srcin}/anat/${subj}_T1w ${srcout}/${subj}_T1w_bet
 
 echo "Registering GASE, BOLD and anatomical data"
-# MERGE -> BOLD -> WHOLEBRAIN -> ANAT -> MNI
+# XXX MERGE -> BOLD -> WHOLEBRAIN -> ANAT -> MNI
 
 # Register GASE_inv data to BOLD data 
-flirt -in ${srcout}/${subj}_gase_merge_ref_bet_inv -ref ${srcout}/${subj}_bold_ref_bet -out ${srcout}/${subj}_gase_merge_ref_bet_inv_regbold -schedule ${FSLDIR}/etc/flirtsch/ztransonly.sch -2D -cost mutualinfo -omat ${srcout}/merge2bold.mat
+#flirt -in ${srcout}/${subj}_gase_merge_ref_bet_inv -ref ${srcout}/${subj}_bold_ref_bet -out ${srcout}/${subj}_gase_merge_ref_bet_inv_regbold -schedule ${FSLDIR}/etc/flirtsch/ztransonly.sch -2D -cost mutualinfo -omat ${srcout}/merge2bold.mat
+
+# Register GASE data to wholebrain
+#flirt -in ${srcout}/${subj}_gase_merge_ref_bet -ref ${srcout}/${subj}_gase_wholebrain_ref_bet -out ${srcout}/${subj}_gase_merge_ref_bet_regwb -schedule ${FSLDIR}/etc/flirtsch/ztransonly.sch -2D -cost mutualinfo -omat ${srcout}/merge2wb.mat
+flirt -in ${srcout}/${subj}_gase_merge_ref_bet -ref ${srcout}/${subj}_gase_wholebrain_ref_bet -out ${srcout}/${subj}_gase_merge_ref_bet_regwb -schedule ${FSLDIR}/etc/flirtsch/ztransonly.sch -2D -cost mutualinfo -omat ${srcout}/merge2wb.mat
 
 # Register BOLD data to wholebrain
-flirt -in ${srcout}/${subj}_bold_ref_bet -ref ${srcout}/${subj}_gase_wholebrain_ref_bet -out ${srcout}/${subj}_bold_ref_bet_regwb -schedule ${FSLDIR}/etc/flirtsch/ztransonly.sch -2D -cost mutualinfo -omat ${srcout}/bold2wb.mat
+#flirt -in ${srcout}/${subj}_bold_ref_bet -ref ${srcout}/${subj}_gase_wholebrain_ref_bet -out ${srcout}/${subj}_bold_ref_bet_regwb -schedule ${FSLDIR}/etc/flirtsch/ztransonly.sch -2D -cost mutualinfo -omat ${srcout}/bold2wb.mat
+
+# Register BOLD data to GASE
+flirt -in ${srcout}/${subj}_bold_ref_bet -ref ${srcout}/${subj}_gase_merge_ref_bet -out ${srcout}/${subj}_bold_ref_bet_regmerge -2D -cost mutualinfo -omat ${srcout}/bold2merge.mat
 
 # Register wholebrain data to anatomical data
 flirt -in ${srcout}/${subj}_gase_wholebrain_ref_bet -ref ${srcout}/${subj}_T1w_bet -out ${srcout}/${subj}_gase_wholebrain_ref_bet_regT1 -dof 6 -omat ${srcout}/wb2anat.mat -cost mutualinfo
@@ -75,20 +84,24 @@ flirt -in ${srcout}/${subj}_gase_wholebrain_ref_bet -ref ${srcout}/${subj}_T1w_b
 # Register anatomical data to standard space
 flirt -in ${srcout}/${subj}_T1w_bet -ref ${FSLDIR}/data/standard/MNI152_T1_1mm_brain -out ${srcout}/${subj}_T1w_bet_regMNI -omat ${srcout}/anat2MNI.mat
 
-echo "Applying transforms to GASE, BOLD and ASL data"
+echo "Applying transforms to GASE and BOLD data"
 
 # Transform GASE data to wholebrain
-convert_xfm -omat ${srcout}/merge2wb.mat -concat ${srcout}/bold2wb.mat ${srcout}/merge2bold.mat
-applywarp --in=${srcout}/${subj}_gase_merge_mcf --ref=${srcout}/${subj}_gase_wholebrain_ref_bet --out=${srcout}/${subj}_gase_merge_mcf_regwb --premat=${srcout}/merge2wb.mat --interp=trilinear
+#convert_xfm -omat ${srcout}/merge2wb.mat -concat ${srcout}/bold2wb.mat ${srcout}/merge2bold.mat
+#applywarp --in=${srcout}/${subj}_gase_merge_mcf --ref=${srcout}/${subj}_gase_wholebrain_ref_bet --out=${srcout}/${subj}_gase_merge_mcf_regwb --premat=${srcout}/merge2wb.mat --interp=trilinear
 
 # Transform BOLD data to wholebrain
-applywarp --in=${srcout}/${subj}_bold_mcf --ref=${srcout}/${subj}_gase_wholebrain_ref_bet --out=${srcout}/${subj}_bold_mcf_regwb --premat=${srcout}/bold2wb.mat --interp=trilinear
+#applywarp --in=${srcout}/${subj}_bold_mcf --ref=${srcout}/${subj}_gase_wholebrain_ref_bet --out=${srcout}/${subj}_bold_mcf_regwb --premat=${srcout}/bold2wb.mat --interp=trilinear
+
+# Transform BOLD data to GASE data
+applywarp --in=${srcout}/${subj}_bold_mcf --ref=${srcout}/${subj}_gase_merge_ref_bet --out=${srcout}/${subj}_bold_mcf_regmerge --premat=${srcout}/bold2merge.mat --interp=trilinear
 
 echo "Apply smoothing FWHM equal to in-plane voxel dimensions"
 #fwhm = 2.355 sigma
 sigma=1
-fslmaths ${srcout}/${subj}_bold_mcf_regwb -s $sigma ${srcout}/${subj}_bold_mcf_regwb_sm
-fslmaths ${srcout}/${subj}_gase_merge_mcf_regwb -s $sigma ${srcout}/${subj}_gase_merge_mcf_regwb_sm
-
+# fslmaths ${srcout}/${subj}_bold_mcf_regwb -s $sigma ${srcout}/${subj}_bold_mcf_regwb_sm
+# fslmaths ${srcout}/${subj}_gase_merge_mcf_regwb -s $sigma ${srcout}/${subj}_gase_merge_mcf_regwb_sm
+fslmaths ${srcout}/${subj}_bold_mcf_regmerge -s $sigma ${srcout}/${subj}_bold_mcf_regmerge_sm
+fslmaths ${srcout}/${subj}_gase_merge_mcf -s $sigma ${srcout}/${subj}_gase_merge_mcf_sm
 
 
