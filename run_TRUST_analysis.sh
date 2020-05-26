@@ -33,7 +33,7 @@ echo Threshold signal for saggital sinus is $mask_thresh
 
 # make mask
 fslmaths ${srcout}/${subj}_trust_roi -thr $mask_thresh -bin ${srcout}/${subj}_trust_mask
-fslview_deprecated ${srcout}/${subj}_trust_roi_mean ${srcout}/${subj}_trust_mask -l Red
+#fslview_deprecated ${srcout}/${subj}_trust_roi_mean ${srcout}/${subj}_trust_mask -l Red
 
 # extract mean timecourse
 fslmeants -i ${srcout}/${subj}_trust_roi_mean -o ${srcout}/${subj}_trust_mean_tc.txt -m ${srcout}/${subj}_trust_mask 
