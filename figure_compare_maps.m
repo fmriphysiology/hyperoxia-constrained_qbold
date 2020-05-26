@@ -9,8 +9,8 @@ function figure_compare_maps(src)
 		disp(subj_id);
 	
 		% Load hqBOLD results
-		[dbv,dims,scales,bpp,endian]  = read_avw([src '/derivatives/' subj_id '/' subj_id '_hcqbold_dbv']);
-		oef = read_avw([src '/derivatives/' subj_id '/' subj_id '_hcqbold_oef']);
+		[dbv,dims,scales,bpp,endian]  = read_avw([src '/derivatives/' subj_id '/' subj_id '_hqbold_dbv']);
+		oef = read_avw([src '/derivatives/' subj_id '/' subj_id '_hqbold_oef']);
 		
 		hqbold_dbv_map((k-1)*dims(1)+1:k*dims(1),:) = rot90(dbv(:,:,slice_no));
 		hqbold_oef_map((k-1)*dims(1)+1:k*dims(1),:) = rot90(oef(:,:,slice_no));
@@ -29,7 +29,7 @@ function figure_compare_maps(src)
 
 	h=figure;
 	set(h,'Position',[scrnsz(3)/2-figdims(1)/2 scrnsz(4)/2-figdims(2)/2 figdims(1) figdims(2)])
-	imagesc(hqbold_dbv_map.*100,[0 10]);
+	imagesc(hqbold_dbv_map.*100,[0 8]);
 	colorbar('NorthOutside')
 	cmap=colormap('jet');
 	cmap(1,:)=[0 0 0];
@@ -51,7 +51,7 @@ function figure_compare_maps(src)
 
 	h=figure;
 	set(h,'Position',[scrnsz(3)/2-figdims(1)/2 scrnsz(4)/2-figdims(2)/2 figdims(1) figdims(2)])
-	imagesc(sqbold_dbv_map.*100,[0 10]);
+	imagesc(sqbold_dbv_map.*100,[0 8]);
 	colorbar('NorthOutside')
 	%colormap('jet')
 	colormap(cmap);

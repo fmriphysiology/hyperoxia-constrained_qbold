@@ -3,17 +3,17 @@ function figure_gm_histograms(hqbold_oef_hist,hqbold_dbv_hist,sqbold_oef_hist,sq
 	num_subj=10;
 	
 	scrnsz = get(0,'screensize');
-	figdims = [1000 100];
+	figdims = [1500 150];
 	h1=figure;
 	h2=figure;
 	h3=figure;
 	h4=figure;
 	
-	ylimsDBVhq=[0 800];
-	ylimsDBVsq=[0 400];
+	ylimsDBVhq=[0 1400];
+	ylimsDBVsq=[0 800];
 	xlimsDBV=[-5 15];
-	ylimsOEFhq=[0 600];
-	ylimsOEFsq=[0 1200];
+	ylimsOEFhq=[0 800];
+	ylimsOEFsq=[0 1400];
 	xlimsOEF=[-50 150];
 			
 	for k=1:num_subj
@@ -61,7 +61,7 @@ function figure_gm_histograms(hqbold_oef_hist,hqbold_dbv_hist,sqbold_oef_hist,sq
 		ylim(ylimsDBVsq);
 		set(gca,'xtick',[0 10])
 		set(gca,'ytick',[0 ylimsDBVsq(2)/2 ylimsDBVsq(2)])
-		title([subj_id ': hqBOLD DBV'])
+		title([subj_id ': sqBOLD DBV'])
 		hold on;
 		plot(median(sqbold_dbv_hist{k}).*ones(2,1),ylimsDBVsq,'r')
 		%plot([0 0],ylimsDBV,'k--')
@@ -77,7 +77,7 @@ function figure_gm_histograms(hqbold_oef_hist,hqbold_dbv_hist,sqbold_oef_hist,sq
 		ylim(ylimsOEFsq);
 		set(gca,'xtick',[0 100])
 		set(gca,'ytick',[0 ylimsOEFsq(2)/2 ylimsOEFsq(2)])
-		title([subj_id ': hqBOLD OEF'])
+		title([subj_id ': sqBOLD OEF'])
 		hold on;
 		plot(median(sqbold_oef_hist{k}).*ones(2,1),ylimsOEFsq,'r')
 		%plot([0 0],ylimsOEF,'k--')

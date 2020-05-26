@@ -3,8 +3,8 @@ function figure_synthetic_r2p(src)
 	subj_id='sub-01';
 	
 	% Load hqBOLD results
-	[r2p,dims,scales,bpp,endian]  = read_avw([src '/derivatives/' subj_id '/' subj_id '_hcqbold_r2p']);
-	dbv = read_avw([src '/derivatives/' subj_id '/' subj_id '_hcqbold_dbv']);
+	[r2p,dims,scales,bpp,endian]  = read_avw([src '/derivatives/' subj_id '/' subj_id '_hqbold_r2p']);
+	dbv = read_avw([src '/derivatives/' subj_id '/' subj_id '_hqbold_dbv']);
 
 	% Load TRUST results
 	Yv=load([src '/derivatives/' subj_id '/' subj_id '_trust_Yv.txt']);
@@ -29,25 +29,25 @@ function figure_synthetic_r2p(src)
 	
 	h=figure;
 	set(h,'Position',[scrnsz(3)/2-figdims(1)/2 scrnsz(4)/2-figdims(2)/2 figdims(1) figdims(2)])
-	imagesc(r2p,[0 8]);
+	imagesc(r2p,[0 7]);
 	colorbar
-	cmap=colormap('gray');
+	cmap=colormap('parula');
 	cmap(1,:)=[0 0 0];
 	colormap(cmap);
 	set(gca,'xticklabel',[])
 	set(gca,'yticklabel',[])
 	axis image
-	title('Apparent R_2^\prime')
+	title('Measured R_2^\prime')
 
 	h=figure;
 	set(h,'Position',[scrnsz(3)/2-figdims(1)/2 scrnsz(4)/2-figdims(2)/2 figdims(1) figdims(2)])
-	imagesc(synth_r2p,[0 8]);
+	imagesc(synth_r2p,[0 7]);
 	colorbar
-	cmap=colormap('gray');
+	cmap=colormap('parula');
 	cmap(1,:)=[0 0 0];
 	colormap(cmap);
 	set(gca,'xticklabel',[])
 	set(gca,'yticklabel',[])
 	axis image
-	title('Synthetic R_2^\prime')	
+	title('Simulated R_2^\prime')	
 	
