@@ -39,6 +39,16 @@ else
 
 fi
 
+echo "Downsampling"
+
+#fslcreatehd 64 64 9 1 3.4375 3.4375 7.5 3 0 0 0 16 ${srcout}/ref64
+
+#applywarp --in=${srcout}/${subj}_gase_spin_echo_repeats --ref=${srcout}/ref64 --out=${srcout}/${subj}_gase_spin_echo_repeats --premat=$FSLDIR/etc/flirtsch/ID_MAT.mat --interp=trilinear
+#applywarp --in=${srcout}/${subj}_gase_long_tau --ref=${srcout}/ref64 --out=${srcout}/${subj}_gase_long_tau --premat=$FSLDIR/etc/flirtsch/ID_MAT.mat --interp=trilinear
+#applywarp --in=${srcout}/${subj}_gase_wholebrain --ref=${srcout}/ref64 --out=${srcout}/${subj}_gase_wholebrain --premat=$FSLDIR/etc/flirtsch/ID_MAT.mat --interp=trilinear
+#applywarp --in=${srcout}/${subj}_gase --ref=${srcout}/ref64 --out=${srcout}/${subj}_gase --premat=$FSLDIR/etc/flirtsch/ID_MAT.mat --interp=trilinear
+
+
 echo "Creating reference images for registration"
 
 # Concatenate GASE datasets together - motion correct, time average and brain extract

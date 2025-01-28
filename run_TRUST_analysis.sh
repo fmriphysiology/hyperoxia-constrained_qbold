@@ -1,5 +1,6 @@
 #!/bin/bash
 
+MATLABDIR=/Applications/MATLAB_R2022b.app/
 
 if [ $# -lt 2 ]
 then

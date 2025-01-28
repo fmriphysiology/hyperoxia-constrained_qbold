@@ -39,3 +39,6 @@ fslmaths ${srcout}/${subj}_gase_merge_csf -uthr ${PVthresh} -bin ${srcout}/${sub
 #fslmaths ${srcout}/${subj}_gase_wholebrain_wm -thr 1 ${srcout}/${subj}_gase_wm_thr
 fslmaths ${srcout}/${subj}_gase_merge_wm -thr 1 ${srcout}/${subj}_gase_wm_thr
 
+#Correct ROI geometries
+fslcpgeom ${srcout}/${subj}_hqbold_oef ${srcout}/${subj}_gase_gm_cortex
+fslcpgeom ${srcout}/${subj}_hqbold_oef ${srcout}/${subj}_gase_wm_thr

@@ -4,7 +4,8 @@ function run_hqBOLD_analysis(src,subj_id)
 
 %% Load dataset
 [r2p_data,dims,scales,bpp,endian] = read_avw([src '/derivatives/' subj_id '/' subj_id '_gase_merge_mcf_sm']);
-r2p_data = r2p_data(:,:,:,29:46); % select only gase_long_tau images from gase_merge  
+%r2p_data = r2p_data(:,:,:,29:46); % select only gase_long_tau images from gase_merge  
+r2p_data = r2p_data(:,:,:,11:1:28); % select gase tau images
 [x y z v] = size(r2p_data);
 tau_ms=(15:3:66);
 
@@ -92,6 +93,7 @@ D = 0.1;
 TE = 35;
 
 v = ((A/TE + B) * (C/dpao2 +D)) .* dbold;
+v = dbold;
 v = v.*mask;
 
 % CALCULATE OEF/[dHb] USING V %

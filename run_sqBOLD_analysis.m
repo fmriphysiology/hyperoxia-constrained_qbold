@@ -27,7 +27,7 @@ tau = tau_ms.*10^-3;
 Tc = 15e-3; % cutoff time for monoexponential regime [s]
 num_long_tau = 18; % only pick up the first 18 taus of gase
 tau_index = find(tau >= Tc,num_long_tau,'first'); % tau's to be used for R2' fitting  
-num_tau_zero = 12; % pick up all 12 tau=0 images
+num_tau_zero = 1; % pick up all 12 tau=0 images
 tau_zero = find(tau == 0,num_tau_zero,'first');
 
 X = [ones(size(tau(tau_index))) -tau(tau_index) ones(size(tau(tau_index)))];
