@@ -1,4 +1,4 @@
-function [T1 T2 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist sqbold_dbv_hist]=tabulate_results(src)
+function [T1 T2 T3 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist sqbold_dbv_hist]=tabulate_results(src)
 
 	num_subj=10;
 
@@ -121,6 +121,7 @@ function [T1 T2 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist 
 	dpaco2(12) = std(dpaco2(1:10));	
 	dpaco2(13) = std(dpaco2(1:10))./mean(dpaco2(1:10));
 	
+    %Table 2 in manuscript
 	T1=table(subj,pao2,dpao2,paco2,dpaco2)
 
 	[hdpao2 pdpao2]=ttest(dpao2(1:10));
@@ -180,7 +181,8 @@ function [T1 T2 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist 
 	sqbold_r2p_iqr_gm(11)=mean(sqbold_r2p_iqr_gm(1:10));
 	sqbold_r2p_iqr_gm(12)=std(sqbold_r2p_iqr_gm(1:10));
 	sqbold_r2p_iqr_gm(13)=std(sqbold_r2p_iqr_gm(1:10))./mean(sqbold_r2p_iqr_gm(1:10));
-		
+	
+    %Table 3 in manuscript
 	T2=table(subj,sqbold_r2p_median_gm,sqbold_r2p_iqr_gm,sqbold_dbv_median_gm,sqbold_dbv_iqr_gm,sqbold_oef_median_gm,sqbold_oef_iqr_gm,hqbold_r2p_median_gm,hqbold_r2p_iqr_gm,hqbold_dbv_median_gm,hqbold_dbv_iqr_gm,hqbold_oef_median_gm,hqbold_oef_iqr_gm,trust_oef)
 
 	[poef tbloef stsoef]=anova1([sqbold_oef_median_gm(1:10) hqbold_oef_median_gm(1:10) trust_oef(1:10)]);
@@ -209,45 +211,6 @@ function [T1 T2 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist 
 	end
 	disp(['hqBOLD R2p values are ' sig ' different to sqBOLD R2p values (p=' num2str(pr2p) ')'])	
 
-	%Group averages - comparison of measured R2' vs synthetic (simulated) R2'
-	hqbold_r2p_median_gm(11)=mean(hqbold_r2p_median_gm(1:10));
-	hqbold_r2p_median_gm(12)=std(hqbold_r2p_median_gm(1:10));
-	hqbold_r2p_median_gm(13)=std(hqbold_r2p_median_gm(1:10))./mean(hqbold_r2p_median_gm(1:10));
-	
-	%%
-	sqbold_r2p_median_gm(11)=mean(sqbold_r2p_median_gm(1:10));
-	sqbold_r2p_median_gm(12)=std(sqbold_r2p_median_gm(1:10));
-	sqbold_r2p_median_gm(13)=std(sqbold_r2p_median_gm(1:10))./mean(sqbold_r2p_median_gm(1:10));
-	
-	%synth_r2p_median_gm(11)=mean(synth_r2p_median_gm(1:10));
-	%synth_r2p_median_gm(12)=std(synth_r2p_median_gm(1:10));	
-	%synth_r2p_median_gm(13)=std(synth_r2p_median_gm(1:10))./mean(synth_r2p_median_gm(1:10));	
-	%hqbold_r2p_median_wm(11)=mean(hqbold_r2p_median_wm(1:10));
-	%hqbold_r2p_median_wm(12)=std(hqbold_r2p_median_wm(1:10));
-	%hqbold_r2p_median_wm(13)=std(hqbold_r2p_median_wm(1:10))./mean(hqbold_r2p_median_wm(1:10));
-
-	%%
-	%sqbold_r2p_median_wm(11)=mean(sqbold_r2p_median_wm(1:10));
-	%sqbold_r2p_median_wm(12)=std(sqbold_r2p_median_wm(1:10));
-	%sqbold_r2p_median_wm(13)=std(sqbold_r2p_median_wm(1:10))./mean(sqbold_r2p_median_wm(1:10));
-
-	%synth_r2p_median_wm(11)=mean(synth_r2p_median_wm(1:10));
-	%synth_r2p_median_wm(12)=std(synth_r2p_median_wm(1:10));
-	%synth_r2p_median_wm(13)=std(synth_r2p_median_wm(1:10))./mean(synth_r2p_median_wm(1:10));
-	
-	T3=table(subj,sqbold_r2p_median_gm,hqbold_r2p_median_gm)
-	%T2=table(subj,hqbold_r2p_median_gm,synth_r2p_median_gm,hqbold_r2p_median_wm,synth_r2p_median_wm)
-	
-	%[p tbl sts]=anova1([hqbold_r2p_median_gm(1:10) synth_r2p_median_gm(1:10) hqbold_r2p_median_wm(1:10) synth_r2p_median_wm(1:10)]);
-	%if p<0.05
-	%	disp('R2p values: One or more groups has a significantly different mean')
-	%	[c m h]=multcompare(sts);
-	%	disp('Multiple comparisons')
-	%	disp(c);
-	%else
-	%	disp('R2p values: None of the group means are significantly different')
-	%end
-
 	[hr2p pr2p]=ttest(hqbold_r2p_median_gm(1:10),sqbold_r2p_median_gm(1:10));
 	if hr2p
 		sig='significantly';
@@ -275,8 +238,6 @@ function [T1 T2 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist 
 	sqbold_r2p_median_wm(12)=std(sqbold_r2p_median_wm(1:10));
 	sqbold_r2p_median_wm(13)=std(sqbold_r2p_median_wm(1:10))./mean(sqbold_r2p_median_wm(1:10));
 
-	T2wm=table(subj,sqbold_r2p_median_wm,sqbold_dbv_median_wm,sqbold_oef_median_wm,hqbold_r2p_median_wm,hqbold_dbv_median_wm,hqbold_oef_median_wm,trust_oef)
-
 	r2p_ratio=sqbold_r2p_median_gm./sqbold_r2p_median_wm;
 	sqDBV_ratio=sqbold_dbv_median_gm./sqbold_dbv_median_wm;
 	hqDBV_ratio=hqbold_dbv_median_gm./hqbold_dbv_median_wm;
@@ -290,5 +251,6 @@ function [T1 T2 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist 
 	hqDBV_ratio(11)=mean(hqDBV_ratio(1:10));
 	hqDBV_ratio(12)=std(hqDBV_ratio(1:10));
 	hqDBV_ratio(13)=std(hqDBV_ratio(1:10))./mean(hqDBV_ratio(1:10));
-
+    
+    % Table 4 in the manuscript
 	T3=table(subj,r2p_ratio,sqDBV_ratio,hqDBV_ratio)
