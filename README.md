@@ -6,4 +6,4 @@ The code in this repository was used to analyse quantitative BOLD (qBOLD) data t
 
 Comparison was made with a whole brain measurement of OEF using TRUST. Please reference this code using the forthcoming Zenodo DOI if you use it in your work. 
 
-Data were analysed using MATLAB version 9.4.0.813654 (R2018a) and FSL (FMRIB Software Library) version 6.0.1 on macOS 10.14.6.
+Data were analysed using MATLAB version 9.13.0.2193358 (R2022b) and FSL (FMRIB Software Library) version 6.0.6.4 on macOS 13.2.1.
