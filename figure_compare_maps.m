@@ -132,4 +132,3 @@ function figure_compare_maps(src)
 	title('hqBOLD OEF')	
 
 	
-	keyboard;

@@ -97,4 +97,4 @@ function figure_bland_altman(Tbl)
 	
 	set(h1,'Position',[scrnsz(3)/2-figdims(1)/2 scrnsz(4)/2-figdims(2)/2 figdims(1) figdims(2)])
 
-	keyboard;
+    

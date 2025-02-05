@@ -2,6 +2,8 @@
 # Nicholas Blockley 2019
 # Run hc-qBOLD analysis
 
+MATLABDIR=/Applications/MATLAB_R2022b.app/
+
 PVthresh=0.5
 
 codedir=`dirname $0` #assume that other scripts are in the same directory
@@ -18,6 +20,8 @@ do
 	echo $subj_id
 	${codedir}/run_reg.sh ${src} $subj_id
 	${codedir}/run_seg.sh ${src} $subj_id
+	${codedir}/run_snr.sh ${src} $subj_id
+	${MATLABDIR}/bin/matlab -nosplash -nodesktop -r "addpath('${codedir}'); run_snr('$src','$subj_id'); exit"
 	${MATLABDIR}/bin/matlab -nosplash -nodesktop -r "addpath('${codedir}'); run_hqBOLD_analysis('$src','$subj_id'); exit"
 	${MATLABDIR}/bin/matlab -nosplash -nodesktop -r "addpath('${codedir}'); run_sqBOLD_analysis('$src','$subj_id'); exit"
 	${codedir}/run_TRUST_analysis.sh ${src} $subj_id

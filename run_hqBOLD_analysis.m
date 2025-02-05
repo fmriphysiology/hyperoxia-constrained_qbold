@@ -58,7 +58,7 @@ et_o2 = et_o2_co2(:,3);
 
 % repetition time
 tr = 1; % [sec] 
-t = (1:300)' .* tr; 
+t = (1:600)' .* tr; 
 
 % interpolate end-tidal values 
 et_o2 = interp1((et_t-et_t(1)).*60, et_o2, t);
@@ -66,13 +66,14 @@ et_co2 = interp1((et_t-et_t(1)).*60, et_co2, t);
 
 et_o2_sm = conv((et_o2-mean(et_o2(1:100)))./max(et_o2-mean(et_o2(1:100))),gampdf(0:0.1:60,1,3));
 % X
-X = [ones(size(t)) et_o2_sm(1:300)'./max(et_o2_sm(1:300))];
+X = [ones(size(t)) et_o2_sm(1:600)'./max(et_o2_sm(1:600))];
 stim=(t>=160).*(t<=260)+(t>130).*(t<160).*(t-130)./30-(t>260).*(t<290).*(t-260)/30+(t>260).*(t<290);
+stim=stim+(t>=460).*(t<=560)+(t>430).*(t<460).*(t-430)./30-(t>560).*(t<590).*(t-560)/30+(t>560).*(t<590);
 X2 = [ones(size(t)) stim];
 
 % Y
 Y1 = reshape(bold_data,x*y*z,v)';
-Y1 = Y1(1:300,:);
+Y1 = Y1(1:600,:);
 Y2 = et_o2;
 
 p = lscov(X,Y1);
@@ -84,7 +85,7 @@ p = lscov(X2,Y2);
 pao2=p(1);
 dpao2=p(2);
 pao2=mean(Y2(1:100));
-dpao2=mean(Y2(175:225))-pao2;
+dpao2=mean([Y2(175:225); Y2(415:465)])-pao2;
 
 A = 27;
 B = 0.2;
@@ -93,7 +94,6 @@ D = 0.1;
 TE = 35;
 
 v = ((A/TE + B) * (C/dpao2 +D)) .* dbold;
-v = dbold;
 v = v.*mask;
 
 % CALCULATE OEF/[dHb] USING V %

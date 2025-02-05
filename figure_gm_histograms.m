@@ -10,7 +10,7 @@ function figure_gm_histograms(hqbold_r2p_hist,hqbold_oef_hist,hqbold_dbv_hist,sq
 	h3=figure;
 	h4=figure;
 	
-	ylimsDBVhq=[0 0.11];
+	ylimsDBVhq=[0 0.13];
 	ylimsDBVsq=[0 0.05];
 	xlimsDBV=[-4 12];
 	ylimsOEFhq=[0 0.07];

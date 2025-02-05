@@ -292,6 +292,3 @@ function [T1 T2 hqbold_r2p_hist hqbold_oef_hist hqbold_dbv_hist sqbold_oef_hist 
 	hqDBV_ratio(13)=std(hqDBV_ratio(1:10))./mean(hqDBV_ratio(1:10));
 
 	T3=table(subj,r2p_ratio,sqDBV_ratio,hqDBV_ratio)
-
-
-	keyboard;
